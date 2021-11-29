@@ -23,8 +23,8 @@ let () =
   and outfile = Sys.argv.(4)
   
   (* These command-line arguments are not used for the moment. *)
-  and _source = int_of_string Sys.argv.(2)
-  and _sink = int_of_string Sys.argv.(3)
+  and source = int_of_string Sys.argv.(2)
+  and sink = int_of_string Sys.argv.(3)
   in
 
   (* Open file *)
@@ -32,9 +32,15 @@ let () =
 
   let test_tools = gmap graph (fun x -> (int_of_string x)) in
 
-  let test_findpath = find_path test_tools 0 5 in
+  let test_findpath = find_path test_tools source sink in
+  
+  let result = List.map string_of_int test_findpath  in
+  
+  let result2 = String.concat ";" result in
 
-  let test_tools2 = gmap test_findpath (fun x -> (string_of_int x)) in 
+  let () = Printf.printf "Chemin égal %s\n%!" result2 in
+
+  ()
   
   (*
   let test_tools2 = add_arc test_tools 3 2 5 in 
@@ -43,7 +49,7 @@ let () =
 
   
   (* Rewrite the graph that has been read. *)
-  let () = export outfile test_tools2 in
+  (*let () = export outfile test_tools2 in
 
-  ()
+  ()*)
 
