@@ -1,5 +1,6 @@
 open Gfile
 open Tools
+open Ford_fulkerson
     
 let () =
 
@@ -29,15 +30,20 @@ let () =
   (* Open file *)
   let graph = from_file infile in
 
-  let test_tools = gmap graph (fun x -> (int_of_string x + 5)) in
+  let test_tools = gmap graph (fun x -> (int_of_string x)) in
 
+  let test_findpath = find_path test_tools 0 5 in
+
+  let test_tools2 = gmap test_findpath (fun x -> (string_of_int x)) in 
+  
+  (*
   let test_tools2 = add_arc test_tools 3 2 5 in 
 
-  let test_tools3 = gmap test_tools2 (fun x -> (string_of_int x)) in 
+  *)
 
   
   (* Rewrite the graph that has been read. *)
-  let () = export outfile test_tools3 in
+  let () = export outfile test_tools2 in
 
   ()
 
