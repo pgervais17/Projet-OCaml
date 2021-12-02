@@ -19,7 +19,7 @@ let find_path gr id1 id2 =
                     | (a,b)::rest -> if a=id2 then a::path 
                     else (match (loop_path (a::path) a) with
                             | [] -> loop_arc rest
-                            | _ -> (a::path))
+                            | rest -> rest)
 
                 in loop_arc to_be_visit                 
     in loop_path [] id1
