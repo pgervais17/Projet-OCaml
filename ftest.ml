@@ -30,9 +30,17 @@ let () =
   (* Open file *)
   let graph = from_file infile in
 
-  let test_tools = gmap graph (fun x -> (int_of_string x)) in
+  let gr = gmap graph (fun x -> (int_of_string x)) in
 
-  let test_findpath = find_path test_tools source sink in
+  let test_ff = ford_fulkerson_algo gr source sink in 
+
+  let result = gmap test_ff (fun x -> string_of_int x) in
+
+  let () = export outfile result in 
+
+  ()
+
+  (*let test_findpath = find_path test_tools source sink in
   
   let result = List.map string_of_int test_findpath  in
   
@@ -53,3 +61,4 @@ let () =
 
   ()*)
 
+*)

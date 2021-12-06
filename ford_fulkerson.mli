@@ -19,6 +19,10 @@ val find_path: residual -> id -> id -> path
 
 val find_mini_flow: residual -> path -> int
 
-val update_path_less : residual -> path -> int -> residual
+val update_path_less : residual -> int -> path -> residual
 
-val update_path_more : residual -> path -> int -> residual
+val update_path_more : residual -> int -> path -> residual
+
+val update_path : residual -> int -> path -> residual
+
+val ford_fulkerson_algo : residual -> id -> id -> residual 
