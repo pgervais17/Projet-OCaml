@@ -29,14 +29,13 @@ let find_path gr id1 id2 =
    (*function qui calcul le flow minimal du chemin trouvé *)
 
 let find_mini_flow gr = function 
- | [] -> assert false
- | (a::path) ->
-
+    | [] -> assert false
+    | (a::path) ->
     let rec loop_mini aux id = function
         | [] -> aux
         | a::rest -> match (find_arc gr id a) with 
                     | None -> failwith "erreur de chemin" 
-                    | Some x ->  if x< aux then loop_mini x a rest else loop_mini aux a rest 
+                    | Some x ->  if x < aux then loop_mini x a rest else loop_mini aux a rest 
     in 
     loop_mini max_int a path 
 
@@ -59,19 +58,21 @@ let update_path_more gr mini_flow = function
         | a::rest -> loop_mini (add_arc gr2 a id mini_flow) a rest
     in loop_mini gr a path
 
+
 let update_path gr mini_flow path =
-    Printf.printf 
     let gr2 = update_path_less gr mini_flow path in  
         let path_more = update_path_more gr2 mini_flow path in 
         path_more
 
 
 let ford_fulkerson_algo gr source target = 
-    let rec loop_find gr2 path = match path with
-        | [] -> gr2 
-        | x::xs -> loop_find (update_path gr2 (find_mini_flow gr2 (x::xs)) (x::xs)) (find_path gr2 source target)
+    let rec loop_find gr2 max_flow path = match path with
+        | [] -> max_flow 
+        | reste -> (let mini_flow = find_mini_flow gr2 path in
+        let gr3 = update_path gr2 mini_flow path in 
+        loop_find gr3 (max_flow+mini_flow) (find_path gr3 source target) )
 
-    in loop_find gr (find_path gr source target)
+    in loop_find gr 0 (find_path gr source target)
             
             
             

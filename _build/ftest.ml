@@ -20,8 +20,9 @@ let () =
   (* Arguments are : infile(1) source-id(2) sink-id(3) outfile(4) *)
   
   let infile = Sys.argv.(1)
-  and outfile = Sys.argv.(4)
+  (*and outfile = Sys.argv.(4)*)
   
+
   (* These command-line arguments are not used for the moment. *)
   and source = int_of_string Sys.argv.(2)
   and sink = int_of_string Sys.argv.(3)
@@ -34,14 +35,14 @@ let () =
 
   let test_ff = ford_fulkerson_algo gr source sink in 
 
-  let result = gmap test_ff (fun x -> string_of_int x) in
+  let () = Printf.printf ("résultat :%d\n%!") test_ff in
+  (*gmap test_ff (fun x -> string_of_int x) in*)
 
-  let () = export outfile result in 
-
+  (*let () = export outfile () in*)
   ()
-
   (*let test_findpath = find_path test_tools source sink in
   
+
   let result = List.map string_of_int test_findpath  in
   
   let result2 = String.concat ";" result in

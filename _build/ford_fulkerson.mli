@@ -25,4 +25,4 @@ val update_path_more : residual -> int -> path -> residual
 
 val update_path : residual -> int -> path -> residual
 
-val ford_fulkerson_algo : residual -> id -> id -> residual 
+val ford_fulkerson_algo : residual -> id -> id -> int
