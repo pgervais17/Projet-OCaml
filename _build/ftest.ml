@@ -20,7 +20,7 @@ let () =
   (* Arguments are : infile(1) source-id(2) sink-id(3) outfile(4) *)
   
   let infile = Sys.argv.(1)
-  (*and outfile = Sys.argv.(4)*)
+  and _outfile = Sys.argv.(4)
   
 
   (* These command-line arguments are not used for the moment. *)
@@ -33,33 +33,24 @@ let () =
 
   let gr = gmap graph (fun x -> (int_of_string x)) in
 
-  let test_ff = ford_fulkerson_algo gr source sink in 
+  let flow_max = ford_fulkerson_algo gr source sink in 
 
-  let () = Printf.printf ("résultat :%d\n%!") test_ff in
-  (*gmap test_ff (fun x -> string_of_int x) in*)
+  (*let path = find_path gr source sink in 
 
-  (*let () = export outfile () in*)
-  ()
-  (*let test_findpath = find_path test_tools source sink in
-  
-
-  let result = List.map string_of_int test_findpath  in
+  let result = List.map string_of_int path in
   
   let result2 = String.concat ";" result in
 
   let () = Printf.printf "Chemin égal %s\n%!" result2 in
 
+  let flow = find_mini_flow gr path in 
+
+  let gr2 = update_path gr flow path in 
+
+  let bis = gmap gr (fun x -> string_of_int x) in 
+
+  let () = export outfile bis in*)
+
+  let () = Printf.printf ("résultat flow_max : %d\n%!") flow_max in 
+
   ()
-  
-  (*
-  let test_tools2 = add_arc test_tools 3 2 5 in 
-
-  *)
-
-  
-  (* Rewrite the graph that has been read. *)
-  (*let () = export outfile test_tools2 in
-
-  ()*)
-
-*)

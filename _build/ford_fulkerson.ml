@@ -17,13 +17,15 @@ let find_path gr id1 id2 =
             let to_be_visit = not_already_vis aux path in 
                 let rec loop_arc = function
                     | [] -> []
-                    | (a,b)::rest -> if a=id2 then a::path 
+                    | (a,b)::rest -> if a=id2 then a::path
                     else (match (loop_path (a::path) a) with
                             | [] -> loop_arc rest
                             | reste -> reste)
 
                 in loop_arc to_be_visit                 
-    in List.rev(loop_path [] id1)
+    in 
+    let res = List.rev(loop_path [] id1) in 
+    if res !=[] then (id1::res) else [] 
     
    
    (*function qui calcul le flow minimal du chemin trouvé *)
@@ -67,7 +69,7 @@ let update_path gr mini_flow path =
 
 let ford_fulkerson_algo gr source target = 
     let rec loop_find gr2 max_flow path = match path with
-        | [] -> max_flow 
+        | [] -> max_flow
         | reste -> (let mini_flow = find_mini_flow gr2 path in
         let gr3 = update_path gr2 mini_flow path in 
         loop_find gr3 (max_flow+mini_flow) (find_path gr3 source target) )
