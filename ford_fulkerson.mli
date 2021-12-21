@@ -5,6 +5,8 @@ type path = id list
 
 type residual = int graph
 
+type graph_flow = (int * int) graph
+
 (* find_path gr forbidden id1 id2 
  *   returns None if no path can be found.
  *   returns Some p if a path p from id1 to id2 has been found. 
@@ -23,6 +25,19 @@ val update_path_less : residual -> int -> path -> residual
 
 val update_path_more : residual -> int -> path -> residual
 
+val del_arc_null: residual -> residual
+
 val update_path : residual -> int -> path -> residual
 
-val ford_fulkerson_algo : residual -> id -> id -> int
+val init_graph_flow : residual -> graph_flow
+
+val update_arc_gf : graph_flow -> id -> id -> int -> graph_flow
+
+val update_graph_flow : graph_flow -> int -> path -> graph_flow
+
+val string_gf : graph_flow -> string graph
+
+val ford_fulkerson_algo : residual -> id -> id -> string graph
+
+
+

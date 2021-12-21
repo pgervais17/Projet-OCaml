@@ -20,7 +20,8 @@ let () =
   (* Arguments are : infile(1) source-id(2) sink-id(3) outfile(4) *)
   
   let infile = Sys.argv.(1)
-  and _outfile = Sys.argv.(4)
+  and outfile = Sys.argv.(4)
+  
   
 
   (* These command-line arguments are not used for the moment. *)
@@ -33,8 +34,12 @@ let () =
 
   let gr = gmap graph (fun x -> (int_of_string x)) in
 
-  let flow_max = ford_fulkerson_algo gr source sink in 
+  let gr2 = ford_fulkerson_algo gr source sink in
 
+  let () = export outfile gr2 in
+
+  ()
+    
   (*let path = find_path gr source sink in 
 
   let result = List.map string_of_int path in
@@ -45,12 +50,7 @@ let () =
 
   let flow = find_mini_flow gr path in 
 
-  let gr2 = update_path gr flow path in *)
+  let gr2 = update_path gr flow path in 
+  
+  let () = Printf.printf ("résultat flow_max : %d\n%!") flow_max in *) 
 
-  let bis = gmap gr (fun x -> string_of_int x) in 
-
-  let () = export outfile bis in
-
-  let () = Printf.printf ("résultat flow_max : %d\n%!") flow_max in 
-
-  ()

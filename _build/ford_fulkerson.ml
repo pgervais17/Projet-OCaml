@@ -6,6 +6,9 @@ type path = id list
 
 type residual = int graph
 
+type graph_flow = (int * int) graph
+
+
 let not_already_vis l_arcs forbidden = List.filter (fun (x,a) -> not (List.mem x forbidden)&& a!=0) l_arcs
     
 let add_forbidden id forbidden = id::forbidden
@@ -48,7 +51,7 @@ let update_path_less gr mini_flow = function
     | (a::path) -> 
     let rec loop_mini gr2 id = function 
         | [] -> gr2
-        | a::rest -> loop_mini (add_arc gr2 id a (-mini_flow)) a rest
+        | a::rest -> loop_mini (add_arc gr2 id a (-mini_flow)) a rest 
     in loop_mini gr a path
 
 
@@ -60,24 +63,50 @@ let update_path_more gr mini_flow = function
         | a::rest -> loop_mini (add_arc gr2 a id mini_flow) a rest
     in loop_mini gr a path
 
+let del_arc_null gr = e_fold gr (fun gr id1 id2 lbl -> if lbl !=0 then new_arc gr id1 id2 lbl else gr) (clone_nodes gr)
 
 let update_path gr mini_flow path =
     let gr2 = update_path_less gr mini_flow path in  
         let path_more = update_path_more gr2 mini_flow path in 
-        path_more
+        del_arc_null path_more
 
+let init_graph_flow gr = gmap gr (fun x -> (0,x) )
+
+let update_arc_gf gr id1 id2 n = match (find_arc gr id1 id2) with 
+    | None -> (match (find_arc gr id2 id1) with 
+        | None -> gr  
+        | Some (x,y) -> new_arc gr id2 id1 (x-n,y))
+    | Some (x,y) -> new_arc gr id1 id2 (n+x,y)
+
+let update_graph_flow gr mini_flow = function
+    | [] -> assert false 
+    | (a::path) ->  
+    let rec loop_mini gr2 id = function 
+        | [] -> gr2
+        | a::rest -> loop_mini (update_arc_gf gr2 id a mini_flow) a rest
+    in loop_mini gr a path 
+
+let string_gf gr = gmap gr (fun (x,y) -> string_of_int x^"/"^string_of_int y )
 
 let ford_fulkerson_algo gr source target = 
-    let rec loop_find gr2 max_flow path = match path with
-        | [] -> max_flow
+    let gf = init_graph_flow gr in
+    let rec loop_find gr2 gf2 max_flow path = match path with
+        | [] -> (gf2,max_flow)
         | reste -> (let mini_flow = find_mini_flow gr2 path in
-        let gr3 = update_path gr2 mini_flow path in 
-        loop_find gr3 (max_flow+mini_flow) (find_path gr3 source target) )
+            let gr3 = update_path gr2 mini_flow path in 
+                let gf3 = update_graph_flow gf2 mini_flow path in 
+                loop_find gr3 gf3 (max_flow+mini_flow) (find_path gr3 source target) )
 
-    in loop_find gr 0 (find_path gr source target)
+    in 
+    let (g,max_flow) = loop_find gr gf 0 (find_path gr source target) in 
+    let () = Printf.printf "The algorithm terminated with a maximum flow value of: %d\n%!" max_flow in 
+    string_gf g
+
             
-            
-            
+ 
+(*let del_arc_null l_arcs = List.filter (fun (x,a) -> not (a!=0)) l_arcs*)
+
+
         
 
 
