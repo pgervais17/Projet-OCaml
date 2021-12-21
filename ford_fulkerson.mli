@@ -15,8 +15,6 @@ type graph_flow = (int * int) graph
  *)
 val not_already_vis : (id * int) list-> id list -> (id * int) list
 
-val add_forbidden: id -> id list -> id list
-
 val find_path: residual -> id -> id -> path 
 
 val find_mini_flow: residual -> path -> int
